@@ -29,6 +29,11 @@
     "sourceMap": false,
     "strict": true,
     "target": "es2022",
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "paths": {
+      "@./stock-information-collector": [
+        "libs/stock-information-collector/src/index.ts"
+      ]
+    }
   }
 }

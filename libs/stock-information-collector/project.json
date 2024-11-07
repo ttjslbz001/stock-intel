@@ -1,0 +1,9 @@
+{
+  "name": "stock-information-collector",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/stock-information-collector/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project stock-information-collector --web",
+  "targets": {}
+}
