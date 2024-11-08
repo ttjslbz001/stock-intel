@@ -30,6 +30,7 @@
     "strict": true,
     "target": "es2022",
     "verbatimModuleSyntax": false,
+    "baseUrl": ".",
     "paths": {
       "@./stock-information-collector": [
         "libs/stock-information-collector/src/index.ts"
