@@ -12,7 +12,6 @@ boto3 = "*"
 pytest = "*"
 python-dotenv = "*"
 pandas-datareader = "*"
-serpapi = "*"
 
 [dev-packages]
 
