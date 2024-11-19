@@ -1,33 +1,110 @@
 {
     "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-    "projectType": "library",
-    "name": "cloud-construct",
-    "sourceRoot": "libs/cloud/construct/src",
-    "generators": {},
+    "projectType": "application",
+    "name": "service-framework-layer-python-lib",
+    "sourceRoot": "aws/cloud/construct/src",
     "targets": {
         "tsc": {
             "executor": "nx:run-commands",
             "options": {
-                "cwd": "libs/cloud/construct",
+                "cwd": "aws/cloud/construct",
                 "commands": [
                     "tsc -p tsconfig.json --noEmit"
                 ]
             }
         },
-        "lint": {
-            "executor": "@nrwl/linter:eslint",
+        "ci-build": {
+            "executor": "nx:run-commands",
             "options": {
-                "lintFilePatterns": ["libs/cloud/construct/**/*.ts"]
+                "cwd": "aws/cloud/construct",
+                "commands": [
+                    {
+                        "command": "cdk synth -q"
+                    }
+                ]
+            }
+        },
+        "cd": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "aws/cloud/construct",
+                "parallel": false,
+                "commands": [
+                    {
+                        "command": "[ -z $CODEBUILD_CI ] && cdk synth -q -o $CDK_OUTDIR || echo Do not need synth",
+                        "forwardAllArgs": false
+                    },
+                    {
+                        "command": "cfn-lint -t $CDK_OUTDIR/$NX_TASK_TARGET_PROJECT.template.json -i W",
+                        "forwardAllArgs": false
+                    },
+                    {
+                        "command": "cdk-assets publish -p $CDK_OUTDIR/$NX_TASK_TARGET_PROJECT.assets.json",
+                        "forwardAllArgs": false
+                    },
+                    {
+                        "command": "aws cloudformation deploy --template-file $CDK_OUTDIR/$NX_TASK_TARGET_PROJECT.template.json  --stack-name $NX_TASK_TARGET_PROJECT --s3-bucket codepipeline-bitbucket-integration-2-{args.env} --no-fail-on-empty-changeset --parameter-overrides Environment={args.env} --capabilities CAPABILITY_IAM",
+                        "forwardAllArgs": false
+                    }
+                ]
+            }
+        },
+        "deploy": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "aws/cloud/construct",
+                "parallel": false,
+                "commands": [
+                    {
+                        "command": "cdk synth -o cdk.out -q"
+                    },
+                    {
+                        "command": "cfn-lint -t  ./cdk.out/service-framework-layer-python-lib.template.json -i W"
+                    },
+                    {
+                        "command": "cdk-assets publish -p ./cdk.out/service-framework-layer-python-lib.assets.json",
+                        "forwardAllArgs": false
+                    },
+                    {
+                        "command": "aws cloudformation deploy --template-file  ./cdk.out/service-framework-layer-python-lib.template.json  --stack-name service-framework-layer-python-lib --s3-bucket codepipeline-bitbucket-integration-2-{args.env} --no-fail-on-empty-changeset --parameter-overrides Environment={args.env} --capabilities CAPABILITY_IAM",
+                        "forwardAllArgs": false
+                    }
+                ]
+            }
+        },
+        "synth": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "aws/cloud/construct",
+                "commands": [
+                    {
+                        "command": "if [ \"{args.env}\" = \"undefined\" ]; then cdk synth --context env=dev; else cdk synth --context env={args.env}; fi"
+                    }
+                ]
+            }
+        },
+        "destroy": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "aws/cloud/construct",
+                "commands": [
+                    {
+                        "command": "if [ \"{args.stack}\" = \"undefined\" ]; then cdk destroy -f; else cdk destroy -f {args.stack}; fi"
+                    }
+                ]
             }
         },
         "test": {
             "executor": "@nrwl/jest:jest",
             "options": {
-                "jestConfig": "libs/cloud/construct/jest.config.ts",
+                "jestConfig": "aws/cloud/construct/jest.config.ts",
                 "passWithNoTests": true
             },
-            "outputs": ["coverage/libs/cloud/construct"]
+            "outputs": [
+                "coverage/aws/cloud/construct/python-lib"
+            ]
         }
     },
-    "tags": []
+    "tags": [],
+    "implicitDependencies": []
 }

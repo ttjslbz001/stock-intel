@@ -48,4 +48,11 @@ Thumbs.db
 .nx/workspace-data
 
 
+# cdk
+**/cdk.out/*
+**/cdk.context.json
+
+# cursor
+.cursorignore
+
 __pycache__

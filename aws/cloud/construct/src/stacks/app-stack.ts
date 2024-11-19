@@ -27,19 +27,9 @@ export class AppStack extends Stack {
       .valueAsString;
     Tags.of(this).add('Environment', env);
 
-    const layer = new LayerVersion(this, `PythonLib}`, {
+    const layer = new LayerVersion(this, `PythonLib`, {
       code: Code.fromAsset(
-        path.join(
-          __dirname,
-          '../',
-          '../',
-          '../',
-          '../',
-          '../',
-          '../',
-          '../',
-          'lib'
-        )
+        path.join(__dirname, '../', '../', '../', '../', '../', 'packages')
       ),
       removalPolicy: RemovalPolicy.RETAIN,
       compatibleRuntimes: [Runtime.PYTHON_3_10, Runtime.PYTHON_3_12],
