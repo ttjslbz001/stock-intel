@@ -1,0 +1,33 @@
+{
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "library",
+    "name": "cloud-construct",
+    "sourceRoot": "libs/cloud/construct/src",
+    "generators": {},
+    "targets": {
+        "tsc": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "libs/cloud/construct",
+                "commands": [
+                    "tsc -p tsconfig.json --noEmit"
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": ["libs/cloud/construct/**/*.ts"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "options": {
+                "jestConfig": "libs/cloud/construct/jest.config.ts",
+                "passWithNoTests": true
+            },
+            "outputs": ["coverage/libs/cloud/construct"]
+        }
+    },
+    "tags": []
+}

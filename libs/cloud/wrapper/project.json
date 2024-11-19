@@ -1,0 +1,31 @@
+{
+	"name": "cloud-wrapper",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"sourceRoot": "libs/cloud/wrapper/src",
+	"tags": [],
+	"generators": {},
+	"targets": {
+		"tsc": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "libs/cloud/wrapper",
+				"commands": ["tsc -p tsconfig.json --noEmit"]
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["libs/cloud/wrapper/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"options": {
+				"jestConfig": "libs/cloud/wrapper/jest.config.ts",
+				"passWithNoTests": true
+			},
+			"outputs": ["{workspaceRoot}/coverage/libs/cloud/wrapper"]
+		}
+	}
+}

@@ -1,0 +1,6 @@
+{
+ "version": 1,
+  "projects": {
+    "cloud-construct": "libs/cloud/construct"
+  }
+}

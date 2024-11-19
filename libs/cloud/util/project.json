@@ -1,0 +1,31 @@
+{
+	"name": "cloud-util",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"sourceRoot": "libs/cloud/util/src",
+	"tags": [],
+	"generators": {},
+	"targets": {
+		"tsc": {
+			"executor": "nx:run-commands",
+			"options": {
+				"cwd": "libs/cloud/util",
+				"commands": ["tsc-strict -p tsconfig.json --noEmit"]
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["libs/cloud/util/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"options": {
+				"jestConfig": "libs/cloud/util/jest.config.ts",
+				"passWithNoTests": true
+			},
+			"outputs": ["{workspaceRoot}/coverage/libs/cloud/util"]
+		}
+	}
+}
